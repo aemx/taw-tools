@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup
 import numpy as np
-import os
 import requests
+
+class col:
+    w = '\033[1;37m'
+    x = '\033[0m'
 
 def scrape(url, selector):
     page = requests.get(url)
@@ -27,4 +30,4 @@ wx_rtmpAr = [scrape(
 )]
 
 wx_rtmp = int(round(np.mean(wx_rtmpAr)))
-print('Current temperature: ' + str(wx_rtmp) + '°F')
+print(col.w + 'Current temperature: ' + col.x + str(wx_rtmp) + '°F')
