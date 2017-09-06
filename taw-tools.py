@@ -7,18 +7,19 @@ class col:
     x = '\033[0m'
 
 def scrape(url, selector):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'lxml')
-    select = soup.select(selector)
     try:
-        return select[0].text
-    except IndexError:
-        return select.text
-    else:
-        print ('Something went wrong.')
+        page = requests.get(url)
+        soup = BeautifulSoup(page.text, 'lxml')
+        select = soup.select(selector)
+        try:
+            return select[0].text
+        except IndexError:
+            return select.text
+    except:
+        print (col.w + 'Something went wrong.' + col.x)
         
 wx_rtmpAr = [float(scrape(
-    'http://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
+    'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current-lrg'
 ).strip('°F')), float(scrape(
     'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
