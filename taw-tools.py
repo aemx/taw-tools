@@ -6,7 +6,11 @@ import requests
 def scrape(url, selector):
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'lxml')
-    return float(soup.select(selector)[0].text.strip('˚°F'))
+    select = soup.select(selector)
+    try:
+        return float(select[0].text.strip('˚°F'))
+    except IndexError:
+        return float(select.text.strip('˚°F'))
 
 wx_rtmpAr = [scrape(
     'http://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
