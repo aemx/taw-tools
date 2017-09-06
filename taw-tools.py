@@ -11,23 +11,33 @@ def scrape(url, selector):
     soup = BeautifulSoup(page.text, 'lxml')
     select = soup.select(selector)
     try:
-        return float(select[0].text.strip('˚°F'))
+        return select[0].text
     except IndexError:
-        return float(select.text.strip('˚°F'))
-
-wx_rtmpAr = [scrape(
+        return select.text
+    else:
+        print ('Something went wrong.')
+        
+wx_rtmpAr = [float(scrape(
     'http://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current-lrg'
-), scrape(
-    'https://www.wunderground.com/weather/us/nj/07103---newark/07103',
+).strip('°F')), float(scrape(
+    'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
     '#curTemp > span > span.wx-value'
-), scrape(
+)), float(scrape(
     'https://darksky.net/forecast/40.7387,-74.1955/us12/en',
     '#title > span.currently > span.desc.swap > span.temp.swip'
-), scrape(
+).strip('˚')), float(scrape(
     'https://www.accuweather.com/en/us/newark-nj/07103/current-weather/2702_pc',
     '#detail-now > div > div.forecast > div.info > div > span.large-temp'
-)]
+).strip('°'))]
 
 wx_rtmp = int(round(np.mean(wx_rtmpAr)))
-print(col.w + 'Current temperature: ' + col.x + str(wx_rtmp) + '°F')
+
+wx_stat = scrape(
+    'http://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
+    '#current_conditions-summary > p.myforecast-current'
+)
+
+print('\n' + \
+col.w + 'Current conditions: ' + col.x + str(wx_rtmp) + '°F ╱' + wx_stat + \
+'\n')
