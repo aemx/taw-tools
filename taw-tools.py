@@ -35,10 +35,10 @@ wx_rtmpAr = [float(scrape(
 wx_rtmp = int(round(np.mean(wx_rtmpAr)))
 
 wx_stat = scrape(
-    'http://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
+    'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current'
 )
 
 print('\n' + \
-col.w + 'Current conditions: ' + col.x + str(wx_rtmp) + '°F ╱' + wx_stat + \
+col.w + 'Current conditions: ' + col.x + str(wx_rtmp) + '°F ╱ ' + wx_stat + \
 '\n')
