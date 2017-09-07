@@ -15,7 +15,7 @@ def scrape(url, selector, chars):
         except IndexError:
             return (select.text).strip(chars)
     except:
-        print (col.w + 'Something went wrong.' + col.x)
+        wprint('Something went wrong')
         
 wx_rtmpAr = [float(scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
@@ -38,12 +38,15 @@ wx_stat = scrape(
     '#current_conditions-summary > p.myforecast-current', ''
 )
 
-wx_atmp = scrape(
+wx_atmp = [float(scrape(
     'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
     '#curFeel > span.wx-data > span.wx-value', ''
-)
+)), float(scrape(
+    'https://www.accuweather.com/en/us/newark-nj/07103/current-weather/2702_pc',
+    '#detail-now > div > div.forecast > div.info > div > span.small-temp', 'RealF®°'
+))]
 
 print('\n' + \
-wprint('Current conditions') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
+wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + \
 '\n')
