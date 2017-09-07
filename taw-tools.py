@@ -5,6 +5,9 @@ import requests
 def wprint(string):
     return '\033[1;37m' + string + ': \033[0m'
 
+def mean(li):
+    return int(round(np.mean(li)))
+
 def scrape(url, selector, chars):
     try:
         page = requests.get(url)
@@ -31,20 +34,22 @@ wx_rtmpAr = [float(scrape(
     '#detail-now > div > div.forecast > div.info > div > span.large-temp', '°'
 ))]
 
-wx_rtmp = int(round(np.mean(wx_rtmpAr)))
+wx_rtmp = mean(wx_rtmpAr)
 
 wx_stat = scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current', ''
 )
 
-wx_atmp = [float(scrape(
+wx_atmpAr = [float(scrape(
     'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
     '#curFeel > span.wx-data > span.wx-value', ''
 )), float(scrape(
     'https://www.accuweather.com/en/us/newark-nj/07103/current-weather/2702_pc',
     '#detail-now > div > div.forecast > div.info > div > span.small-temp', 'RealF®°'
 ))]
+
+wx_atmp = mean(wx_atmpAr)
 
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
