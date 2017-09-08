@@ -59,8 +59,10 @@ wx_windAr = [float(scrape(
     '#currentDetails > div.wind > span.val.swap > span.num.swip', ''
 ))]
 
+wx_wind = mean(wx_windAr)
+
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
-wprint('Wind speed') + str(wx_windAr) + ' mph' + \
+wprint('Wind speed') + str(wx_wind) + ' mph' + \
 '\n')
