@@ -27,7 +27,7 @@ wx_rtmpAr = [float(scrape(
     'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
     '#curTemp > span > span.wx-value', ''
 )), float(scrape(
-    'https://darksky.net/forecast/40.7387,-74.1955/us12/en',
+    'https://darksky.net/forecast/40.7387,-74.1955',
     '#title > span.currently > span.desc.swap > span.temp.swip', '˚'
 )), float(scrape(
     'https://www.accuweather.com/en/us/newark-nj/07103/current-weather/2702_pc',
@@ -46,12 +46,18 @@ wx_atmpAr = [float(scrape(
     '#curFeel > span.wx-data > span.wx-value', ''
 )), float(scrape(
     'https://www.accuweather.com/en/us/newark-nj/07103/current-weather/2702_pc',
-    '#detail-now > div > div.forecast > div.info > div > span.small-temp', 'RealF®°'
+    '#detail-now > div > div.forecast > div.info > div > span.small-temp', 'aeFlR®°'
 ))]
 
 wx_atmp = mean(wx_atmpAr)
 
+wx_wind = scrape(
+    'https://darksky.net/forecast/40.7387,-74.1955',
+    '#currentDetails > div.wind > span.val.swap > span.num.swip', ''
+)
+
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
-wprint('Feels like') + str(wx_atmp) + '°F' + \
+wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
+wprint('Wind speed') + str(wx_wind) + ' mph' + \
 '\n')
