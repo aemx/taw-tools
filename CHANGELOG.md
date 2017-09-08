@@ -1,6 +1,16 @@
 # Changelog
 _All notable changes to this project will be documented in this file._
 
+## [v0.0.4](https://github.com/aemx/taw-tools/tree/0.0.4) (2017-09-08)
+
+[Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.3...0.0.4)
+
+### Added
+
+- Scraper for wind speed
+- Calculator for wind state
+- Datatype arguement in scraper function
+
 ## [v0.0.3](https://github.com/aemx/taw-tools/tree/0.0.3) (2017-09-07)
 
 [Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.2...0.0.3)
