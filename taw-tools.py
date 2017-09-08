@@ -51,13 +51,16 @@ wx_atmpAr = [float(scrape(
 
 wx_atmp = mean(wx_atmpAr)
 
-wx_wind = scrape(
+wx_windAr = [float(scrape(
+    'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
+    '#windCompassSpeed > h4 > span', ''
+)), float(scrape(
     'https://darksky.net/forecast/40.7387,-74.1955',
     '#currentDetails > div.wind > span.val.swap > span.num.swip', ''
-)
+))]
 
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
-wprint('Wind speed') + str(wx_wind) + ' mph' + \
+wprint('Wind speed') + str(wx_windAr) + ' mph' + \
 '\n')
