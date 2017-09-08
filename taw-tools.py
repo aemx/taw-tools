@@ -61,8 +61,12 @@ wx_windAr = [float(scrape(
 
 wx_wind = mean(wx_windAr)
 
+if wx_wind >= 25: wx_wist = ' ╱ Windy'
+elif wx_wind >= 15: wx_wist = ' ╱ Light wind'
+else: wx_wist = ''
+
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
-wprint('Wind speed') + str(wx_wind) + ' mph' + \
+wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + \
 '\n')
