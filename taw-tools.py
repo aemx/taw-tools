@@ -113,5 +113,5 @@ print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
 wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
-wprint('Weekend forcast') + '\n' + str(wx_fore) + \
+wprint('Weekend forecast') + '\n' + str(wx_fore) + \
 '\n')

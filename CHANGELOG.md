@@ -1,6 +1,15 @@
 # Changelog
 _All notable changes to this project will be documented in this file._
 
+## [v0.0.5](https://github.com/aemx/taw-tools/tree/0.0.5) (2017-09-10)
+
+[Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.4...0.0.5)
+
+### Added
+
+- Scraper for weekend forecast
+- Special scraping functions for larger datasets
+
 ## [v0.0.4](https://github.com/aemx/taw-tools/tree/0.0.4) (2017-09-08)
 
 [Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.3...0.0.4)
