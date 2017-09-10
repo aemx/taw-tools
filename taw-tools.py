@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 import numpy as np
 import requests
+from terminaltables import SingleTable
 
-def wprint(string):
-    return '\033[1;37m' + string + ': \033[0m'
+def wprint(string): return '\033[1;37m' + string + ': \033[0m'
 
 def scrape(url, selector, datatype, chars):
     try:
@@ -17,16 +17,23 @@ def scrape(url, selector, datatype, chars):
     except:
         wprint('Something went wrong')
 
-def mean(li):
-    return int(round(np.mean(li)))
+def mean(li): return int(round(np.mean(li)))
 
 def remove(li, remli):
     for x in remli:
-        val_index = li.index(x)
-        del li[val_index]
-        del li[val_index]
+        index = li.index(x)
+        del li[index]
+        del li[index]
     return li
 
+def tablegen(li):
+    data = []
+    for index, value in enumerate(li):
+        if index % 2 == 0:
+            data.append([li[index], li[index + 1]])
+    table = SingleTable(data)
+    table.inner_heading_row_border = False
+    return table.table
 
 wx_rtmpAr = [scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
@@ -98,13 +105,13 @@ wx_foreRaw = wx_foreRaw.replace('$ Night', ' Night$')
 wx_foreRaw = wx_foreRaw.replace('  ', ' ')
 wx_foreRaw = wx_foreRaw.replace('. $', '.$')
 wx_foreRaw = wx_foreRaw.lstrip('\n')
-
 wx_foreAr = wx_foreRaw.split('$')
-wx_fore = remove(wx_foreAr, remAr)
+
+wx_fore = tablegen(remove(wx_foreAr, remAr))
 
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
 wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
-str(wx_fore) + \
+wprint('Weekend forcast') + '\n' + str(wx_fore) + \
 '\n')
