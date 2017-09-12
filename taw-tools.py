@@ -35,6 +35,12 @@ def tablegen(li):
     table.inner_heading_row_border = False
     return table.table
 
+def tr_air(iata):
+    return (scrape(
+        'https://www.flightview.com/airport/' + iata + '/delay',
+        '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
+    ).replace('	', '')).splitlines()[1]
+
 wx_rtmpAr = [scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current-lrg', float, '°F'
@@ -110,27 +116,12 @@ wx_foreAr = wx_foreRaw.split('$')
 
 wx_fore = tablegen(remove(wx_foreAr, remAr))
 '''
-tr_air_ewr = (scrape(
-    'https://www.flightview.com/airport/EWR/delay',
-    '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
-).replace('	', '')).splitlines()[1]
-
-tr_air_jfk = (scrape(
-    'https://www.flightview.com/airport/JFK/delay',
-    '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
-).replace('	', '')).splitlines()[1]
-
-tr_air_lga = (scrape(
-    'https://www.flightview.com/airport/LGA/delay',
-    '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
-).replace('	', '')).splitlines()[1]
-
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
 wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
 # wprint('Weekend forecast') + '\n' + str(wx_fore) + \
-wprint('EWR departure delays') + tr_air_ewr + '\n' + \
-wprint('JFK departure delays') + tr_air_jfk + '\n' + \
-wprint('LGA departure delays') + tr_air_lga + \
+wprint('EWR departure delays') + tr_air('EWR') + '\n' + \
+wprint('JFK departure delays') + tr_air('JFK') + '\n' + \
+wprint('LGA departure delays') + tr_air('LGA') + \
 '\n')
