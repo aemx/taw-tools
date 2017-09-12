@@ -100,7 +100,7 @@ remAr = [
     'Monday Night', 'Tuesday', 'Tuesday Night',
     'Wednesday', 'Wednesday Night', 'Thursday',
     'Thursday Night', 'Friday', 'Today', 'Overnight'
-]
+] # Today, This Afternoon, Overnight [2 - 3]
 
 for x in dayAr:
     wx_foreRaw = wx_foreRaw.replace(x, '$' + x + '$')

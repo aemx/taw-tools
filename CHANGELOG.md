@@ -1,5 +1,16 @@
 # Changelog
 _All notable changes to this project will be documented in this file._
+## [v0.0.6](https://github.com/aemx/taw-tools/tree/0.0.6) (2017-09-12)
+
+[Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.5...0.0.6)
+
+### Added
+
+- Scraping function for airport delays
+
+### Deprecated
+
+- Scraper for weekend forecast
 
 ## [v0.0.5](https://github.com/aemx/taw-tools/tree/0.0.5) (2017-09-10)
 
