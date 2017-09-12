@@ -120,6 +120,11 @@ tr_air_jfk = (scrape(
     '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
 ).replace('	', '')).splitlines()[1]
 
+tr_air_lga = (scrape(
+    'https://www.flightview.com/airport/LGA/delay',
+    '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
+).replace('	', '')).splitlines()[1]
+
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
@@ -127,4 +132,5 @@ wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
 # wprint('Weekend forecast') + '\n' + str(wx_fore) + \
 wprint('EWR departure delays') + tr_air_ewr + '\n' + \
 wprint('JFK departure delays') + tr_air_jfk + '\n' + \
+wprint('LGA departure delays') + tr_air_lga + \
 '\n')
