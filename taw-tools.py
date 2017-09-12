@@ -110,9 +110,15 @@ wx_foreAr = wx_foreRaw.split('$')
 
 wx_fore = tablegen(remove(wx_foreAr, remAr))
 '''
+tr_air_ewr = (scrape(
+    'https://www.flightview.com/airport/EWR/delay',
+    '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
+).replace('	', '')).splitlines()[1]
+
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
 wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
 # wprint('Weekend forecast') + '\n' + str(wx_fore) + \
+wprint('Departure delays') + 'EWR - ' + tr_air_ewr + '\n'
 '\n')
