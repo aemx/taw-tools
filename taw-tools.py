@@ -79,7 +79,7 @@ wx_wind = mean(wx_windAr)
 if wx_wind >= 25: wx_wist = ' ╱ Windy'
 elif wx_wind >= 15: wx_wist = ' ╱ Light Wind'
 else: wx_wist = ''
-
+'''
 wx_foreRaw = scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#detailed-forecast-body', str, ''
@@ -93,12 +93,13 @@ dayAr = [
 remAr = [
     'Monday Night', 'Tuesday', 'Tuesday Night',
     'Wednesday', 'Wednesday Night', 'Thursday',
-    'Thursday Night', 'Friday', 'Overnight'
+    'Thursday Night', 'Friday', 'Today', 'Overnight'
 ]
 
 for x in dayAr:
     wx_foreRaw = wx_foreRaw.replace(x, '$' + x + '$')
 
+wx_foreRaw = wx_foreRaw.replace('Today', 'Today$')
 wx_foreRaw = wx_foreRaw.replace('Tonight', 'Tonight$')
 wx_foreRaw = wx_foreRaw.replace('Overnight', 'Overnight$')
 wx_foreRaw = wx_foreRaw.replace('$ Night', ' Night$')
@@ -108,10 +109,10 @@ wx_foreRaw = wx_foreRaw.lstrip('\n')
 wx_foreAr = wx_foreRaw.split('$')
 
 wx_fore = tablegen(remove(wx_foreAr, remAr))
-
+'''
 print('\n' + \
 wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
 wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
 wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
-wprint('Weekend forecast') + '\n' + str(wx_fore) + \
+# wprint('Weekend forecast') + '\n' + str(wx_fore) + \
 '\n')
