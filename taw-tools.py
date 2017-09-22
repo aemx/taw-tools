@@ -3,7 +3,7 @@ import numpy as np
 import requests
 from terminaltables import SingleTable
 
-def wprint(string): return '\033[1;37m' + string + ': \033[0m'
+def wprint(string): return '\033[1;37m' + string + '\033[0m\n'
 
 def scrape(url, selector, datatype, chars):
     try:
@@ -36,10 +36,41 @@ def tablegen(li):
     return table.table
 
 def tr_air(iata):
-    return (scrape(
+    status = (scrape(
         'https://www.flightview.com/airport/' + iata + '/delay',
         '#airportPage > div.status-box.gray > div.status-box-body > div > p > span', str, '\n'
     ).replace('	', '')).splitlines()[1]
+
+    if status == 'Normal':
+        return 'currently experiencing minimal delays of less than 15 minutes'
+    elif status == 'Minor Delays' or 'Advisory':
+        return 'currently experiencing minor delays of 30 minutes'
+    elif status == 'Major Delays':
+        return 'currently experiencing major delays in excess of 45 minutes'
+    else:
+        return 'currently closed until further notice'
+
+def Ptr_air():
+    if tr_air('EWR') == tr_air('JFK') == tr_air('LGA'):
+        endstr = 'all local metropolitan airports are ' + tr_air('EWR') + '.'
+    elif tr_air('EWR') != tr_air('JFK') == tr_air('LGA'):
+        endstr = 'Newark International is ' + tr_air('EWR') + ', ' + \
+        'while JFK and La Guardia are ' + \
+        tr_air('JFK').replace('currently ', '') + '.'
+    elif tr_air('JFK') != tr_air('LGA') == tr_air('EWR'):
+        endstr = 'JFK is ' + tr_air('JFK') + ', ' + \
+        'while La Guardia and Newark International are ' + \
+        tr_air('LGA').replace('currently ', '') + '.'
+    elif tr_air('LGA') != tr_air('EWR') == tr_air('JFK'):
+        endstr = 'La Guardia is ' + tr_air('LGA') + ', ' + \
+        'while Newark International and JFK are ' + \
+        tr_air('EWR').replace('currently ', '') + '.'
+    else:
+        endstr = 'Newark International is ' + tr_air('EWR') + ', ' + \
+        'JFK is ' + tr_air('JFK').replace('currently ', '') + ', ' + \
+        'and La Guardia is ' + tr_air('LGA').replace('currently ', '') + '.'
+
+    return 'If you’re looking to catch a flight today, ' + endstr
 
 wx_rtmpAr = [scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
@@ -97,17 +128,15 @@ dayAr = [
 ]
 
 remAr = [
-    'Monday Night', 'Tuesday', 'Tuesday Night',
-    'Wednesday', 'Wednesday Night', 'Thursday',
-    'Thursday Night', 'Friday', 'Today', 'Overnight'
-] # Today, This Afternoon, Overnight [2 - 3]
+    'This Afternoon', 'Monday Night', 'Tuesday', 'Tuesday Night',
+    'Wednesday', 'Wednesday Night', 'Thursday'
+]
 
 for x in dayAr:
     wx_foreRaw = wx_foreRaw.replace(x, '$' + x + '$')
 
-wx_foreRaw = wx_foreRaw.replace('Today', 'Today$')
+wx_foreRaw = wx_foreRaw.replace('This Afternoon', 'This Afternoon$')
 wx_foreRaw = wx_foreRaw.replace('Tonight', 'Tonight$')
-wx_foreRaw = wx_foreRaw.replace('Overnight', 'Overnight$')
 wx_foreRaw = wx_foreRaw.replace('$ Night', ' Night$')
 wx_foreRaw = wx_foreRaw.replace('  ', ' ')
 wx_foreRaw = wx_foreRaw.replace('. $', '.$')
@@ -117,11 +146,9 @@ wx_foreAr = wx_foreRaw.split('$')
 wx_fore = tablegen(remove(wx_foreAr, remAr))
 '''
 print('\n' + \
-wprint('Currently') + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
-wprint('Feels like') + str(wx_atmp) + '°F' + '\n' + \
-wprint('Wind speed') + str(wx_wind) + ' mph' + wx_wist + '\n' + \
-# wprint('Weekend forecast') + '\n' + str(wx_fore) + \
-wprint('EWR departure delays') + tr_air('EWR') + '\n' + \
-wprint('JFK departure delays') + tr_air('JFK') + '\n' + \
-wprint('LGA departure delays') + tr_air('LGA') + \
-'\n')
+'Currently: ' + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
+'Feels like: ' + str(wx_atmp) + '°F' + '\n' + \
+'Wind speed: ' + str(wx_wind) + ' mph' + wx_wist + '\n')
+# 'Weekend forecast' + '\n' + str(wx_fore) + '\n')
+
+print(wprint('FLIGHT INFORMATION') + Ptr_air())
