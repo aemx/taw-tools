@@ -26,6 +26,7 @@ def remove(li, remli):
         index = li.index(x)
         del li[index]
         del li[index]
+    del li[0]
     return li
 
 def tablegen(li):
@@ -101,10 +102,10 @@ wx_tempAr = [scrape(
 
 wx_temp = str(mean(wx_tempAr)) + ' degrees'
 
-wx_stat = (scrape(
+wx_stat = scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current', str, ''
-)).lower()
+).lower()
 
 wx_windAr = [scrape(
     'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
@@ -116,36 +117,31 @@ wx_windAr = [scrape(
 
 wx_wind = mean(wx_windAr)
 
-'''
 wx_foreRaw = scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#detailed-forecast-body', str, ''
-)
+).lstrip('\n')
 
-dayAr = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-    'Friday', 'Saturday', 'Sunday'
+days_all = [
+    'This Afternoon', 'Tonight', 'Saturday', 'Sunday',
+    'Monday', 'Tuesday', 'Wednesday', 'Thursday'
 ]
 
-remAr = [
+days_ignore = [
     'This Afternoon', 'Monday Night', 'Tuesday', 'Tuesday Night',
     'Wednesday', 'Wednesday Night', 'Thursday'
 ]
 
-for x in dayAr:
+for x in days_all:
     wx_foreRaw = wx_foreRaw.replace(x, '$' + x + '$')
 
-wx_foreRaw = wx_foreRaw.replace('This Afternoon', 'This Afternoon$')
-wx_foreRaw = wx_foreRaw.replace('Tonight', 'Tonight$')
 wx_foreRaw = wx_foreRaw.replace('$ Night', ' Night$')
 wx_foreRaw = wx_foreRaw.replace('  ', ' ')
 wx_foreRaw = wx_foreRaw.replace('. $', '.$')
-wx_foreRaw = wx_foreRaw.lstrip('\n')
 wx_foreAr = wx_foreRaw.split('$')
+wx_foreAr = remove(wx_foreAr, days_ignore)
+wx_fore = tablegen(wx_foreAr)
 
-wx_fore = tablegen(remove(wx_foreAr, remAr))
-'''
-
-# 'Weekend forecast' + '\n' + str(wx_fore) + '\n')
+print(str(wx_fore))
 print('\n' + wprint('FLIGHT INFORMATION') + Ptr_air() + '\n')
 print(wprint('CURRENT WEATHER') + Pwx_con() + '\n')
