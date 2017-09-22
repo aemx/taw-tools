@@ -1,5 +1,18 @@
 # Changelog
 _All notable changes to this project will be documented in this file._
+
+## [v0.0.7](https://github.com/aemx/taw-tools/tree/0.0.7) (2017-09-22)
+
+[Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.6...0.0.7)
+
+### Changed
+
+- Start using teleprompt-style output
+
+### Fixed
+
+- Weekend forecast scraper
+
 ## [v0.0.6](https://github.com/aemx/taw-tools/tree/0.0.6) (2017-09-12)
 
 [Full Changelog](https://github.com/aemx/taw-tools/compare/0.0.5...0.0.6)
@@ -8,9 +21,9 @@ _All notable changes to this project will be documented in this file._
 
 - Scraping function for airport delays
 
-### Deprecated
+### Known bugs
 
-- Scraper for weekend forecast
+- Weekend forecast scraper is broken on certain days of the week
 
 ## [v0.0.5](https://github.com/aemx/taw-tools/tree/0.0.5) (2017-09-10)
 
