@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import numpy as np
 import requests
-from terminaltables import SingleTable
 
 def wprint(string):
     return '\033[1;37m' + string + '\033[0m\n'
@@ -21,22 +20,12 @@ def scrape(url, selector, datatype, chars):
 def mean(li):
     return int(round(np.mean(li)))
 
-def remove(li, remli):
-    for x in remli:
-        index = li.index(x)
-        del li[index]
-        del li[index]
+def clean(li, li_ignore):
+    for idx, val in enumerate(li_ignore):
+        del li[idx]
+        del li[idx]
     del li[0]
     return li
-
-def tablegen(li):
-    data = []
-    for index, value in enumerate(li):
-        if index % 2 == 0:
-            data.append([li[index], li[index + 1]])
-    table = SingleTable(data)
-    table.inner_heading_row_border = False
-    return table.table
 
 def tr_air(iata):
     status = (scrape(
@@ -57,25 +46,25 @@ def Ptr_air():
     if tr_air('EWR') == tr_air('JFK') == tr_air('LGA'):
         endstr = 'all local metropolitan airports are ' + tr_air('EWR') + '.'
     elif tr_air('EWR') != tr_air('JFK') == tr_air('LGA'):
-        endstr = 'Newark International is ' + tr_air('EWR') + ', ' + \
+        endstr = 'Newark International is ' + tr_air('EWR') + ',\n' + \
         'while JFK and La Guardia are ' + \
         tr_air('JFK').replace('currently ', '') + '.'
     elif tr_air('JFK') != tr_air('LGA') == tr_air('EWR'):
-        endstr = 'JFK is ' + tr_air('JFK') + ', ' + \
+        endstr = 'JFK is ' + tr_air('JFK') + ',\n' + \
         'while La Guardia and Newark International are ' + \
         tr_air('LGA').replace('currently ', '') + '.'
     elif tr_air('LGA') != tr_air('EWR') == tr_air('JFK'):
-        endstr = 'La Guardia is ' + tr_air('LGA') + ', ' + \
+        endstr = 'La Guardia is ' + tr_air('LGA') + ',\n' + \
         'while Newark International and JFK are ' + \
         tr_air('EWR').replace('currently ', '') + '.'
     else:
-        endstr = 'Newark International is ' + tr_air('EWR') + ', ' + \
-        'JFK is ' + tr_air('JFK').replace('currently ', '') + ', ' + \
+        endstr = 'Newark International is ' + tr_air('EWR') + ',\n' + \
+        'JFK is ' + tr_air('JFK').replace('currently ', '') + ',\n' + \
         'and La Guardia is ' + tr_air('LGA').replace('currently ', '') + '.'
 
     return 'If you’re looking to catch a flight today, ' + endstr
 
-def Pwx_con():
+def Pwx_all():
     if wx_wind >= 25:
         wx_wist = ' with wind'
     elif wx_wind >= 15:
@@ -83,8 +72,16 @@ def Pwx_con():
     else:
         wx_wist = ''
 
-    return 'Looking at the weather today, it is ' + \
-    wx_stat + wx_wist + ' in Newark with a temperature of ' + wx_temp + '.'
+    wx_fore = ''
+
+    for idx, val in enumerate(wx_foreAr):
+        if idx % 2 == 0:
+            wx_fore += '\n' + val + ' ... '
+        else:
+            wx_fore += val + ' '
+            
+    return 'Currently, it is ' + wx_stat + wx_wist + \
+    ' in Newark with a temperature of ' + wx_temp + '.' + wx_fore
 
 wx_tempAr = [scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
@@ -132,16 +129,14 @@ days_ignore = [
     'Wednesday', 'Wednesday Night', 'Thursday'
 ]
 
-for x in days_all:
-    wx_foreRaw = wx_foreRaw.replace(x, '$' + x + '$')
+for day in days_all:
+    wx_foreRaw = wx_foreRaw.replace(day, '$' + day + '$')
 
 wx_foreRaw = wx_foreRaw.replace('$ Night', ' Night$')
 wx_foreRaw = wx_foreRaw.replace('  ', ' ')
 wx_foreRaw = wx_foreRaw.replace('. $', '.$')
 wx_foreAr = wx_foreRaw.split('$')
-wx_foreAr = remove(wx_foreAr, days_ignore)
-wx_fore = tablegen(wx_foreAr)
+wx_foreAr = clean(wx_foreAr, days_ignore)
 
-print(str(wx_fore))
 print('\n' + wprint('FLIGHT INFORMATION') + Ptr_air() + '\n')
-print(wprint('CURRENT WEATHER') + Pwx_con() + '\n')
+print(wprint('CURRENT WEATHER') + Pwx_all() + '\n')
