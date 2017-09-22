@@ -3,7 +3,8 @@ import numpy as np
 import requests
 from terminaltables import SingleTable
 
-def wprint(string): return '\033[1;37m' + string + '\033[0m\n'
+def wprint(string):
+    return '\033[1;37m' + string + '\033[0m\n'
 
 def scrape(url, selector, datatype, chars):
     try:
@@ -17,7 +18,8 @@ def scrape(url, selector, datatype, chars):
     except:
         wprint('Something went wrong')
 
-def mean(li): return int(round(np.mean(li)))
+def mean(li):
+    return int(round(np.mean(li)))
 
 def remove(li, remli):
     for x in remli:
@@ -72,7 +74,18 @@ def Ptr_air():
 
     return 'If you’re looking to catch a flight today, ' + endstr
 
-wx_rtmpAr = [scrape(
+def Pwx_con():
+    if wx_wind >= 25:
+        wx_wist = ' with wind'
+    elif wx_wind >= 15:
+        wx_wist = ' with light wind'
+    else:
+        wx_wist = ''
+
+    return 'Looking at the weather today, it is ' + \
+    wx_stat + wx_wist + ' in Newark with a temperature of ' + wx_temp + '.'
+
+wx_tempAr = [scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current-lrg', float, '°F'
 ), scrape(
@@ -86,22 +99,12 @@ wx_rtmpAr = [scrape(
     '#detail-now > div > div.forecast > div.info > div > span.large-temp', float, '°'
 )]
 
-wx_rtmp = mean(wx_rtmpAr)
+wx_temp = str(mean(wx_tempAr)) + ' degrees'
 
-wx_stat = scrape(
+wx_stat = (scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
     '#current_conditions-summary > p.myforecast-current', str, ''
-)
-
-wx_atmpAr = [scrape(
-    'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
-    '#curFeel > span.wx-data > span.wx-value', float, ''
-), scrape(
-    'https://www.accuweather.com/en/us/newark-nj/07103/current-weather/2702_pc',
-    '#detail-now > div > div.forecast > div.info > div > span.small-temp', float, 'aeFlR®°'
-)]
-
-wx_atmp = mean(wx_atmpAr)
+)).lower()
 
 wx_windAr = [scrape(
     'https://www.wunderground.com/personal-weather-station/dashboard?ID=KNJNEWAR10',
@@ -113,9 +116,6 @@ wx_windAr = [scrape(
 
 wx_wind = mean(wx_windAr)
 
-if wx_wind >= 25: wx_wist = ' ╱ Windy'
-elif wx_wind >= 15: wx_wist = ' ╱ Light Wind'
-else: wx_wist = ''
 '''
 wx_foreRaw = scrape(
     'https://forecast.weather.gov/MapClick.php?lat=40.7387&lon=-74.1955',
@@ -145,10 +145,7 @@ wx_foreAr = wx_foreRaw.split('$')
 
 wx_fore = tablegen(remove(wx_foreAr, remAr))
 '''
-print('\n' + \
-'Currently: ' + str(wx_rtmp) + '°F ╱ ' + wx_stat + '\n' + \
-'Feels like: ' + str(wx_atmp) + '°F' + '\n' + \
-'Wind speed: ' + str(wx_wind) + ' mph' + wx_wist + '\n')
-# 'Weekend forecast' + '\n' + str(wx_fore) + '\n')
 
-print(wprint('FLIGHT INFORMATION') + Ptr_air())
+# 'Weekend forecast' + '\n' + str(wx_fore) + '\n')
+print('\n' + wprint('FLIGHT INFORMATION') + Ptr_air() + '\n')
+print(wprint('CURRENT WEATHER') + Pwx_con() + '\n')
